@@ -1,5 +1,4 @@
 package com.ads.gasto.model;
-
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -32,6 +31,9 @@ public class UsuariosModel implements Serializable {
     @Column(name = "nome", length = 100, nullable = false)
     private String nome;
 
+    @Column(name = "correo", length = 255, nullable = false, unique = true)
+    private String correo;
+
     private String password;
 
     private String token;
@@ -41,5 +43,9 @@ public class UsuariosModel implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "perfil_id")
     private PerfilModel perfil;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "estados_id")
+    private EstadosModel estado;
     
 }

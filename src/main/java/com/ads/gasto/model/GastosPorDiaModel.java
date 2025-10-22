@@ -1,8 +1,6 @@
-package com.ads.gasto;
+package com.ads.gasto.model;
 
 import java.util.Date;
-
-import com.ads.gasto.model.ProveedoreModel;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
