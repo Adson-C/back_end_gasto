@@ -13,4 +13,7 @@ public interface GastosFixoService {
     public GastosFixoModel buscarPorId(Long id);
 
     public void eliminar(Long id);
+
+    // lista por mes e ano
+    public List<GastosFixoModel> listarPorMes(Integer mes, Integer ano);
 }

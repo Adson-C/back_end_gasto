@@ -34,4 +34,12 @@ public class GastosFixoServiceImpl implements GastosFixoService {
     public void eliminar(Long id) {
         gastosFixoRepository.deleteById(id);
     }
+
+    @Override
+    public List<GastosFixoModel> listarPorMes(Integer mes, Integer ano) {
+        if (mes == null || ano == null) {
+            throw new RuntimeException("O mês e o ano são obrigatórios");
+        }
+        return gastosFixoRepository.findByAllMonth(mes, ano);
+    }
 }

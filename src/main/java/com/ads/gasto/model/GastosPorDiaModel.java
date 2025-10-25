@@ -11,15 +11,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "gastos_por_dia")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class GastosPorDiaModel implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -37,5 +33,16 @@ public class GastosPorDiaModel implements java.io.Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "proveedores_id")
     private ProveedoreModel proveedoreId;
-    
+
+    public GastosPorDiaModel(Long liquido, Long iva, Long total, Date fecha, String descripcion, ProveedoreModel proveedoreId) {
+        this.liquido = liquido;
+        this.iva = iva;
+        this.total = total;
+        this.fecha = fecha;
+        this.descripcion = descripcion;
+        this.proveedoreId = proveedoreId;
+    }
+    public GastosPorDiaModel() {
+        super();
+    }
 }
