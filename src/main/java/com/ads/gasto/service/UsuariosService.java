@@ -13,4 +13,8 @@ public interface UsuariosService {
     public UsuariosModel buscarPorId(Long id);
 
     public void eliminar(Long id);
+
+    public UsuariosModel buscarPorCorreo(String correo);
+
+    public UsuariosModel buscarPorCorreoAtivo(String correo);
 }

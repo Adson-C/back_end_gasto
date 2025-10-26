@@ -11,15 +11,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "usuarios")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class UsuariosModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,10 +38,21 @@ public class UsuariosModel implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "perfil_id")
-    private PerfilModel perfil;
+    private PerfilModel perfilId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estados_id")
-    private EstadosModel estado;
+    private EstadosModel estadosId;
     
+    public UsuariosModel(String nome, String correo, String password, Date fecha, PerfilModel perfilId, EstadosModel estadosId) {
+        this.nome = nome;
+        this.correo = correo;
+        this.password = password;
+        this.fecha = fecha;
+        this.perfilId = perfilId;
+        this.estadosId = estadosId;
+    }
+    public UsuariosModel() {
+        super();
+    }
 }
