@@ -18,146 +18,143 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import com.ads.gasto.dto.GastosFixoRequestDto;
-import com.ads.gasto.dto.GastosFixoResponseDto;
-import com.ads.gasto.mapper.GastosFixoMapper;
-import com.ads.gasto.model.GastosFixoModel;
+import com.ads.gasto.dto.GastosDiaRequestDto;
+import com.ads.gasto.dto.GastosDiaResponseDto;
+import com.ads.gasto.mapper.GastosDiaMapper;
+import com.ads.gasto.model.GastosPorDiaModel;
 import com.ads.gasto.model.ProveedoreModel;
-import com.ads.gasto.service.impl.EstadoServiceImpl;
-import com.ads.gasto.service.impl.GastosFixoServiceImpl;
+import com.ads.gasto.service.impl.GastosPorDiaServiceImpl;
 import com.ads.gasto.service.impl.ProveedoreServiceImpl;
 
 @CrossOrigin(origins = "*",maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1")
-public class GastosFixoController {
+public class GastosDiaController {
 
     @Autowired
-    private GastosFixoServiceImpl gastosFixoServiceImpl;
-
-    @Autowired
-    private EstadoServiceImpl estadoServiceImpl;
+    private GastosPorDiaServiceImpl gastosPorDiaServiceImpl;
 
     @Autowired
     private ProveedoreServiceImpl proveedoreServiceImpl;
 
     @Autowired
-    private GastosFixoMapper gastosFixoMapper;
+    private GastosDiaMapper gastosDiaMapper;
 
-    /*
-     * Listar gastos fixos por mês e ano
+      /*
+     * Listar gastos por dia por mês e ano
      * @return ResponseEntity<?>
      * @throws Exception
      * author Adson Sá
      */
     @SuppressWarnings({ "serial", "unchecked" })
-    @GetMapping("/gastos-fixos")
-    public ResponseEntity<?> getMothYear() {
+    @GetMapping("/gastos-dia")
+    public ResponseEntity<?> getGastosDia() {
         LocalDate dataAtual = LocalDate.now();
         Integer mes = dataAtual.getMonthValue();
         Integer ano = dataAtual.getYear();
         
-        List<GastosFixoModel> gastos = gastosFixoServiceImpl.listarPorMes(mes, ano);
-        List<GastosFixoResponseDto> gastosDto = gastosFixoMapper.toDtoList(gastos);
+        List<GastosPorDiaModel> gastos = gastosPorDiaServiceImpl.listarPorMes(mes, ano);
+        List<GastosDiaResponseDto> gastosDto = gastosDiaMapper.toDtoList(gastos);
         
         return ResponseEntity.status(HttpStatus.OK).body(gastosDto);
     }
 
     /*
-     * Listar gastos fixos por mês exato
+     * Listar gastos por dia por mês exato
      * @return ResponseEntity<?>
      * @throws Exception
      * author Adson Sá
      */
     @SuppressWarnings({ "serial", "unchecked" })
-    @GetMapping("/gastos-fixos/{mes}")
-    public ResponseEntity<?> getMothExact(@PathVariable Integer mes) {
+    @GetMapping("/gastos-dia/{dia}")
+    public ResponseEntity<?> getDayExact(@PathVariable Integer dia) {
         LocalDate dataAtual = LocalDate.now();
         Integer ano = dataAtual.getYear();
         
-        List<GastosFixoModel> gastos = gastosFixoServiceImpl.listarPorMes(mes, ano);
-        List<GastosFixoResponseDto> gastosDto = gastosFixoMapper.toDtoList(gastos);
+        List<GastosPorDiaModel> gastos = gastosPorDiaServiceImpl.listarPorMes(dia, ano);
+        List<GastosDiaResponseDto> gastosDto = gastosDiaMapper.toDtoList(gastos);
         
         return ResponseEntity.status(HttpStatus.OK).body(gastosDto);
     }
-    /*{
-    "nome": "Conta de Luz",
-    "quantia": 90,
-    "proveedoreId": 1,
-    "estadoId": 1-4
-} */
-      /*
-     * Criar gastos fixos
+
+    /*
+    {
+     "liquido": 100
+     "iva": 19
+     "total": 119
+     "descripcion": "Gasto de teste"
+     "proveedoreId": 1
+    }
+    */
+     /*
+     * Criar gastos por dia
      * @return ResponseEntity<?>
      * @throws Exception
      * author Adson Sá
      */
     @SuppressWarnings({ "serial", "unchecked" })
-    @PostMapping("/gastos-fixos")
-    public ResponseEntity<?> createGastoFixo(@RequestBody GastosFixoRequestDto dto) {
-        ProveedoreModel proveedore = proveedoreServiceImpl.buscarPorId(dto.getProveedoreId());
-        if(proveedore == null){
+    @PostMapping("/gastos-dia")
+    public ResponseEntity<?> createGastoDia(@RequestBody GastosDiaRequestDto dto) {
+
+        ProveedoreModel proveedore = this.proveedoreServiceImpl.buscarPorId(dto.getProveedoreId());
+         if (proveedore != null) {
+            try{
+                this.gastosPorDiaServiceImpl.guardar(
+                    new GastosPorDiaModel(
+                        dto.getLiquido(),
+                        dto.getIva(),
+                        dto.getTotal(),
+                        new Date(),
+                        dto.getDescripcion(),
+                        proveedore
+                    )
+                );
+                return ResponseEntity.status(HttpStatus.CREATED).body(new HashMap<String, String>(){
+                    {
+                        put("message", "Gasto por dia criado com sucesso");
+                    }
+                });
+            }catch(Exception e){
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new HashMap<String, String>(){
+                    {
+                        put("message", "Erro ao criar gasto por dia");
+                    }
+                });
+            }
+         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new HashMap<String, String>(){
                 {
                     put("message", "Proveedor não encontrado");
                 }
             });
-
-        }else{
-            try{
-                this.gastosFixoServiceImpl.guardar(
-                    new GastosFixoModel(
-                        dto.getNome(),
-                        dto.getQuantia(),
-                        new Date(),
-                        this.estadoServiceImpl.buscarPorId(4L).orElse(null),
-                        proveedore
-                    )
-                );
-                return ResponseEntity.status(HttpStatus.CREATED).body(new HashMap<String, String>(){
-                    
-                });
-            }catch(Exception e){
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new HashMap<String, String>(){
-                    {
-                        put("message", "Erro ao criar gasto fixo");
-                    }
-                });
-            }
-        }   
+         }
     }
-/*{
-    "nome": "Conta de Luz",
-    "quantia": 90,
-    "proveedoreId": 1,
-    "estadoId": 3-4
-} */
-     /*
-     * Atualizar gastos fixos
-     * @param id
-     * @param dto
+
+    /*
+     * Atualizar gastos por dia
      * @return ResponseEntity<?>
      * @throws Exception
      * author Adson Sá
      */
     @SuppressWarnings({ "serial", "unchecked" })
-    @PutMapping("/gastos-fixos/{id}")
-    public ResponseEntity<?> updateGastoFixo(@PathVariable Long id, @RequestBody GastosFixoRequestDto dto) {
-        GastosFixoModel gastoFixo = this.gastosFixoServiceImpl.buscarPorId(id);
+    @PutMapping("/gastos-dia/{id}")
+    public ResponseEntity<?> updateGastoDia(@PathVariable Long id, @RequestBody GastosDiaRequestDto dto) {
+        GastosPorDiaModel gastoPorDia = this.gastosPorDiaServiceImpl.buscarPorId(id);
         ProveedoreModel proveedore = proveedoreServiceImpl.buscarPorId(dto.getProveedoreId());
-        if(gastoFixo == null || proveedore == null){
+        if(gastoPorDia == null || proveedore == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new HashMap<String, String>(){
                 {
-                    put("message", "Gasto fixo ou proveedor não encontrado");
+                    put("message", "Gasto por dia ou proveedor não encontrado");
                 }
             });
         }else{
             try{
-                gastoFixo.setEstadoId(this.estadoServiceImpl.buscarPorId(dto.getEstadoId()).orElse(null));
-                gastoFixo.setQuantia(dto.getQuantia());
-                gastoFixo.setNome(dto.getNome());
-                gastoFixo.setProveedoreId(proveedore);
-                this.gastosFixoServiceImpl.guardar(gastoFixo);
+                gastoPorDia.setLiquido(dto.getLiquido());
+                gastoPorDia.setIva(dto.getIva());
+                gastoPorDia.setTotal(dto.getTotal());
+                gastoPorDia.setDescripcion(dto.getDescripcion());
+                gastoPorDia.setProveedoreId(proveedore);
+                this.gastosPorDiaServiceImpl.guardar(gastoPorDia);
                 return ResponseEntity.status(HttpStatus.OK).body(new HashMap<String, String>(){
                     {
                         put("message", "Gasto fixo atualizado com sucesso");
@@ -182,14 +179,14 @@ public class GastosFixoController {
      * author Adson Sá
      */
     @SuppressWarnings({ "serial", "unchecked" })
-    @DeleteMapping("/gastos-fixos/{id}")
-    public ResponseEntity<?> deleteGastoFixo(@PathVariable Long id) {
-        GastosFixoModel gastoFixo = this.gastosFixoServiceImpl.buscarPorId(id);
-        if(gastoFixo != null){
-            this.gastosFixoServiceImpl.eliminar(id);
+    @DeleteMapping("/gastos-dia/{id}")
+    public ResponseEntity<?> deleteGastoDia(@PathVariable Long id) {
+        GastosPorDiaModel gastoPorDia = this.gastosPorDiaServiceImpl.buscarPorId(id);
+        if(gastoPorDia != null){
+            this.gastosPorDiaServiceImpl.eliminar(id);
             return ResponseEntity.status(HttpStatus.OK).body(new HashMap<String, String>(){
                 {
-                    put("message", "Gasto fixo deletado com sucesso");
+                    put("message", "Gasto por dia deletado com sucesso");
                 }
             });
             

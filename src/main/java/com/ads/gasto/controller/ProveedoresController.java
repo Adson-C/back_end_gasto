@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.ads.gasto.dto.ProveedoresRequestDto;
 import com.ads.gasto.model.ProveedoreModel;
 import com.ads.gasto.service.impl.ProveedoreServiceImpl;
 
+@CrossOrigin(origins = "*",maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1")
 public class ProveedoresController {

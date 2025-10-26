@@ -34,4 +34,12 @@ public class GastosPorDiaServiceImpl implements GastosPorDiaService {
     public void eliminar(Long id) {
         gastosPorDiaRepository.deleteById(id);
     }
+
+    @Override
+    public List<GastosPorDiaModel> listarPorMes(Integer mes, Integer ano) {
+        if (mes == null || ano == null) {
+            throw new RuntimeException("O mês e o ano são obrigatórios");
+        }
+        return gastosPorDiaRepository.findByAllMonth(mes, ano);
+    }
 }

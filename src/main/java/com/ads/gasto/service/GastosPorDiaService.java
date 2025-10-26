@@ -13,4 +13,6 @@ public interface GastosPorDiaService {
     public GastosPorDiaModel buscarPorId(Long id);
 
     public void eliminar(Long id);
+
+    public List<GastosPorDiaModel> listarPorMes(Integer mes, Integer ano);
 }
