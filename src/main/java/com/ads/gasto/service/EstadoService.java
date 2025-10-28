@@ -13,7 +13,7 @@ public interface EstadoService {
 
     public void guardar(EstadosModel estado);
 
-    public Optional<EstadosModel> buscarPorId(Long id);
+    public EstadosModel buscarPorId(Long id);
 
     public void eliminar(Long id);
 }

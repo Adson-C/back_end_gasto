@@ -28,10 +28,10 @@ public class EstadoServiceImpl implements EstadoService {
     }
 
     @Override
-    public Optional<EstadosModel> buscarPorId(Long id) {
+    public EstadosModel buscarPorId(Long id) {
         Optional<EstadosModel> optional = estadosRepository.findById(id);
         if (optional.isPresent()) {
-            return optional;
+            return optional.get();
         }
         return null;
     }
