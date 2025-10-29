@@ -1,8 +1,6 @@
 package com.ads.gasto.model;
-
 import java.io.Serializable;
 import java.sql.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,14 +30,23 @@ public class UsuariosModel implements Serializable {
     @Column(name = "nome", length = 100, nullable = false)
     private String nome;
 
+    @Column(name = "correo", length = 255, nullable = false, unique = true)
+    private String correo;
+
     private String password;
-
     private String token;
-
     private Date fecha;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "perfil_id")
-    private PerfilModel perfil;
-    
+    private PerfilModel perfilId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "estados_id")
+    private EstadosModel estadosId;
+
+    // Método para obtenção de autoridades, se necessário
+    // public Collection<? extends GrantedAuthority> getAuthorities() {
+    //     return Arrays.stream(this.perfilId.getNome().split(",")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+    // }
 }
