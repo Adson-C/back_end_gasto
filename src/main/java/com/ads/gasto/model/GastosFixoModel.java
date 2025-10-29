@@ -11,15 +11,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "gastos_fixos")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class GastosFixoModel implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -41,4 +37,15 @@ public class GastosFixoModel implements java.io.Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "proveedores_id")
     private ProveedoreModel proveedoreId;
+    
+    public GastosFixoModel(String nome, Long quantia, Date fecha, EstadosModel estadoId, ProveedoreModel proveedoreId) {
+        this.nome = nome;
+        this.quantia = quantia;
+        this.fecha = fecha;
+        this.estadoId = estadoId;
+        this.proveedoreId = proveedoreId;
+    }
+    public GastosFixoModel() {
+        super();
+    }
 }

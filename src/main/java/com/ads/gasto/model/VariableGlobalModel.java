@@ -8,15 +8,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "variable_global")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class VariableGlobalModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,7 +24,19 @@ public class VariableGlobalModel implements Serializable {
     @Column(name = "nome", length = 100, nullable = false)
     private String nome;
 
-    @Column(name = "valor", length = 100, nullable = false)
+    @Column(name = "valor", length = 500, nullable = false)
     private String valor;
+
+
+    public VariableGlobalModel() {
+        super();
+    }
+
+    public VariableGlobalModel(Long id, String nome, String valor) {
+        super();
+        this.id = id;
+        this.nome = nome;
+        this.valor = valor;
+    }
     
 }
