@@ -1,7 +1,6 @@
 package com.ads.gasto.model;
 import java.io.Serializable;
 import java.sql.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,11 +10,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "usuarios")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UsuariosModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,28 +34,19 @@ public class UsuariosModel implements Serializable {
     private String correo;
 
     private String password;
-
     private String token;
-
     private Date fecha;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "perfil_id")
     private PerfilModel perfilId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "estados_id")
     private EstadosModel estadosId;
-    
-    public UsuariosModel(String nome, String correo, String password, Date fecha, PerfilModel perfilId, EstadosModel estadosId) {
-        this.nome = nome;
-        this.correo = correo;
-        this.password = password;
-        this.fecha = fecha;
-        this.perfilId = perfilId;
-        this.estadosId = estadosId;
-    }
-    public UsuariosModel() {
-        super();
-    }
+
+    // Método para obtenção de autoridades, se necessário
+    // public Collection<? extends GrantedAuthority> getAuthorities() {
+    //     return Arrays.stream(this.perfilId.getNome().split(",")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+    // }
 }

@@ -5,6 +5,8 @@ import com.ads.gasto.model.UsuariosModel;
 import com.ads.gasto.repository.IUsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +22,7 @@ public class UsuariosServiceImpl implements UsuariosService {
     @Override
     public List<UsuariosModel> listar() {
         return usuariosRepository.findAll();
-    }   
+    }
 
     @Override
     public UsuariosModel guardar(UsuariosModel usuario) {
@@ -43,9 +45,10 @@ public class UsuariosServiceImpl implements UsuariosService {
     }
 
     @Override
+    @Transactional
     public UsuariosModel buscarPorCorreoAtivo(String correo) {
-        Optional<UsuariosModel> optional = this.usuariosRepository.findByCorreoAndEstadoId(correo,
-        Optional.ofNullable(this.estadoServiceImpl.buscarPorId(1L)).get().orElse(null));
+        Optional<UsuariosModel> optional = this.usuariosRepository.findByCorreoAndEstadosId(correo,
+                Optional.ofNullable(this.estadoServiceImpl.buscarPorId(1L)).get());
         return optional.get();
     }
 }

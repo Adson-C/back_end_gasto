@@ -1,16 +1,13 @@
 package com.ads.gasto.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-
 @AllArgsConstructor
 @Data
-public class GastosFixoRequestDto {
-
+public class UsuarioRequestDto {
+    
     private String nome;
-    private Long quantia;
-    private Long estadoId;
-    private Long proveedoreId;
+    private String correo;
+    private String password;
 }
