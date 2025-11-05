@@ -6,13 +6,13 @@ import com.ads.gasto.model.UsuariosModel;
 
 public interface UsuariosService {
 
-    public List<UsuariosModel> listar();
+    List<UsuariosModel> listar();
 
-    public UsuariosModel guardar(UsuariosModel usuario);
+    UsuariosModel guardar(UsuariosModel usuario);
 
-    public UsuariosModel buscarPorId(Long id);
+    UsuariosModel buscarPorId(Long id);
 
-    public void eliminar(Long id);
+    void eliminar(Long id);
 
     public UsuariosModel buscarPorCorreo(String correo);
 

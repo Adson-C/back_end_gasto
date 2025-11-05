@@ -8,15 +8,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "estados")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class EstadosModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -27,5 +23,12 @@ public class EstadosModel implements Serializable {
 
     @Column(name = "nome", length = 255, nullable = false)
     private String nome;
-    
+
+    public EstadosModel(String nome) {
+        this.nome = nome;
+    }
+
+    public EstadosModel() {
+        super();
+    }
 }

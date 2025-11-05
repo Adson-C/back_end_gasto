@@ -110,7 +110,7 @@ public class GastosFixoController {
                         dto.getNome(),
                         dto.getQuantia(),
                         new Date(),
-                        this.estadoServiceImpl.buscarPorId(4L).orElse(null),
+                        this.estadoServiceImpl.buscarPorId(4L),
                         proveedore
                     )
                 );
@@ -153,16 +153,12 @@ public class GastosFixoController {
             });
         }else{
             try{
-                gastoFixo.setEstadoId(this.estadoServiceImpl.buscarPorId(dto.getEstadoId()).orElse(null));
+                gastoFixo.setEstadoId(this.estadoServiceImpl.buscarPorId(dto.getEstadoId()));
                 gastoFixo.setQuantia(dto.getQuantia());
                 gastoFixo.setNome(dto.getNome());
                 gastoFixo.setProveedoreId(proveedore);
                 this.gastosFixoServiceImpl.guardar(gastoFixo);
-                return ResponseEntity.status(HttpStatus.OK).body(new HashMap<String, String>(){
-                    {
-                        put("message", "Gasto fixo atualizado com sucesso");
-                    }
-                });
+                return ResponseEntity.status(HttpStatus.OK).body(new HashMap<String, String>(){});
             }catch(Exception e){
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new HashMap<String, String>(){
                     {

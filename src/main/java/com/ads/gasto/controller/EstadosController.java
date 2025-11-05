@@ -35,4 +35,5 @@ public class EstadosController {
         ids.add(3L);
         return ResponseEntity.status(HttpStatus.OK).body(estadoServiceImpl.listarParaGasto(ids));
     }
+
 }

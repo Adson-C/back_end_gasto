@@ -11,5 +11,5 @@ public interface IUsuariosRepository extends JpaRepository<UsuariosModel, Long> 
 
     UsuariosModel findByCorreo(String correo);
 
-    Optional<UsuariosModel> findByCorreoAndEstadoId(String correo, EstadosModel estadosId);
+    Optional<UsuariosModel> findByCorreoAndEstadosId(String correo, EstadosModel estadosId);
 }
