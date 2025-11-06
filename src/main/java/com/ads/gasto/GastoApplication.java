@@ -1,7 +1,8 @@
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              package com.ads.gasto;
+       package com.ads.gasto;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class GastoApplication {
@@ -9,12 +10,12 @@ public class GastoApplication {
 		SpringApplication.run(GastoApplication.class, args);
 
 		
-		// BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			
-		// String senhaOriginal = "minhaSenha123";
-		// String senhaCodificada = encoder.encode(senhaOriginal);
+		String senhaOriginal = "123456";
+		String senhaCodificada = encoder.encode(senhaOriginal);
 
-		// System.out.println("Senha codificada: " + senhaCodificada);
+		System.out.println("Senha codificada: " + senhaCodificada);
 		}
 }
  

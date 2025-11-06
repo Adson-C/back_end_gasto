@@ -43,7 +43,7 @@ public class EstadoServiceImpl implements EstadoService {
 
     @Override
     public List<EstadosModel> listarParaGasto(List<Long> id) {
-        return estadosRepository.findByIdIn(id);
+        return estadosRepository.findAll(Sort.by("id").ascending());
     }
 
 }

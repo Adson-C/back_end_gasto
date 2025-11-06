@@ -8,6 +8,4 @@ import com.ads.gasto.model.EstadosModel;
 
 public interface IEstadosRepository extends JpaRepository<EstadosModel, Long> {
 
-    List<EstadosModel> findByIdIn(List<Long> id);
-
 }
