@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ads.gasto.model.GastosFixoModel;
 import com.ads.gasto.repository.IGastosFixoRepository;
@@ -17,8 +18,9 @@ public class GastosFixoServiceImpl implements GastosFixoService {
     
     @Override
     public List<GastosFixoModel> listar() {
-        return gastosFixoRepository.findAll();
-    }
+        return gastosFixoRepository.findAll(
+            org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "id"));
+}
 
     @Override
     public GastosFixoModel guardar(GastosFixoModel gastoFixo) {
@@ -36,6 +38,7 @@ public class GastosFixoServiceImpl implements GastosFixoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<GastosFixoModel> listarPorMes(Integer mes, Integer ano) {
         if (mes == null || ano == null) {
             throw new RuntimeException("O mês e o ano são obrigatórios");

@@ -12,7 +12,7 @@ public class GastoApplication {
 		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			
-		String senhaOriginal = "minhaSenha123";
+		String senhaOriginal = "123456";
 		String senhaCodificada = encoder.encode(senhaOriginal);
 
 		System.out.println("Senha codificada: " + senhaCodificada);

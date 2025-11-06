@@ -1,8 +1,6 @@
 package com.ads.gasto.service;
 
 import java.util.List;
-import java.util.Optional;
-
 import com.ads.gasto.model.EstadosModel;
 
 public interface EstadoService {

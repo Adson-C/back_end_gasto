@@ -1,6 +1,7 @@
 package com.ads.gasto.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,17 +18,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ads.gasto.dto.GastosFixoRequestDto;
 import com.ads.gasto.dto.GastosFixoResponseDto;
 import com.ads.gasto.mapper.GastosFixoMapper;
 import com.ads.gasto.model.GastosFixoModel;
 import com.ads.gasto.model.ProveedoreModel;
+import com.ads.gasto.model.ReceitasModel;
 import com.ads.gasto.service.impl.EstadoServiceImpl;
 import com.ads.gasto.service.impl.GastosFixoServiceImpl;
 import com.ads.gasto.service.impl.ProveedoreServiceImpl;
 
-@CrossOrigin(origins = "*",maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*", methods = { RequestMethod.GET, RequestMethod.POST,
+    RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS })
 @RestController
 @RequestMapping("/api/v1")
 public class GastosFixoController {
@@ -111,7 +115,8 @@ public class GastosFixoController {
                         dto.getQuantia(),
                         new Date(),
                         this.estadoServiceImpl.buscarPorId(4L),
-                        proveedore
+                        proveedore,
+                        new ArrayList<ReceitasModel>()
                     )
                 );
                 return ResponseEntity.status(HttpStatus.CREATED).body(new HashMap<String, String>(){
