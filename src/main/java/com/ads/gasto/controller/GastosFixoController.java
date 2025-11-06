@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,40 +53,52 @@ public class GastosFixoController {
     private GastosFixoMapper gastosFixoMapper;
 
     /*
-     * Listar gastos fixos por mês e ano
+     * Listar gastos fixos por mês e ano (com paginação)
+     * @param page - Número da página (padrão: 0)
+     * @param size - Tamanho da página (padrão: 10)
      * @return ResponseEntity<?>
      * @throws Exception
      * author Adson Sá
      */
     @SuppressWarnings({ "serial", "unchecked" })
     @GetMapping("/gastos-fixos")
-    public ResponseEntity<?> getMothYear() {
+    public ResponseEntity<?> getMothYear(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
         LocalDate dataAtual = LocalDate.now();
         Integer mes = dataAtual.getMonthValue();
         Integer ano = dataAtual.getYear();
         
-        List<GastosFixoModel> gastos = gastosFixoServiceImpl.listarPorMes(mes, ano);
-        List<GastosFixoResponseDto> gastosDto = gastosFixoMapper.toDtoList(gastos);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        Page<GastosFixoModel> gastosPage = gastosFixoServiceImpl.listarPorMesPaginado(mes, ano, pageable);
+        Page<GastosFixoResponseDto> gastosDtoPage = gastosPage.map(gasto -> gastosFixoMapper.toDto(gasto));
         
-        return ResponseEntity.status(HttpStatus.OK).body(gastosDto);
+        return ResponseEntity.status(HttpStatus.OK).body(gastosDtoPage);
     }
 
     /*
-     * Listar gastos fixos por mês exato
+     * Listar gastos fixos por mês exato (com paginação)
+     * @param mes - Mês a ser consultado
+     * @param page - Número da página (padrão: 0)
+     * @param size - Tamanho da página (padrão: 10)
      * @return ResponseEntity<?>
      * @throws Exception
      * author Adson Sá
      */
     @SuppressWarnings({ "serial", "unchecked" })
     @GetMapping("/gastos-fixos/{mes}")
-    public ResponseEntity<?> getMothExact(@PathVariable Integer mes) {
+    public ResponseEntity<?> getMothExact(
+            @PathVariable Integer mes,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size) {
         LocalDate dataAtual = LocalDate.now();
         Integer ano = dataAtual.getYear();
         
-        List<GastosFixoModel> gastos = gastosFixoServiceImpl.listarPorMes(mes, ano);
-        List<GastosFixoResponseDto> gastosDto = gastosFixoMapper.toDtoList(gastos);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        Page<GastosFixoModel> gastosPage = gastosFixoServiceImpl.listarPorMesPaginado(mes, ano, pageable);
+        Page<GastosFixoResponseDto> gastosDtoPage = gastosPage.map(gasto -> gastosFixoMapper.toDto(gasto));
         
-        return ResponseEntity.status(HttpStatus.OK).body(gastosDto);
+        return ResponseEntity.status(HttpStatus.OK).body(gastosDtoPage);
     }
     /*{
     "nome": "Conta de Luz",
