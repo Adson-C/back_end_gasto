@@ -3,6 +3,8 @@ package com.ads.gasto.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +22,19 @@ public class GastosFixoServiceImpl implements GastosFixoService {
     public List<GastosFixoModel> listar() {
         return gastosFixoRepository.findAll(
             org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "id"));
-}
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<GastosFixoModel> listarPaginado(Pageable pageable) {
+        return gastosFixoRepository.findAll(
+            org.springframework.data.domain.PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "id")
+            )
+        );
+    }
 
     @Override
     public GastosFixoModel guardar(GastosFixoModel gastoFixo) {
@@ -44,5 +58,22 @@ public class GastosFixoServiceImpl implements GastosFixoService {
             throw new RuntimeException("O mês e o ano são obrigatórios");
         }
         return gastosFixoRepository.findByAllMonth(mes, ano);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<GastosFixoModel> listarPorMesPaginado(Integer mes, Integer ano, Pageable pageable) {
+        if (mes == null || ano == null) {
+            throw new RuntimeException("O mês e o ano são obrigatórios");
+        }
+        return gastosFixoRepository.findByAllMonthPageable(
+            mes, 
+            ano, 
+            org.springframework.data.domain.PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "id")
+            )
+        );
     }
 }
