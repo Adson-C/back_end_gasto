@@ -64,7 +64,7 @@ public class GastosFixoController {
     @GetMapping("/gastos-fixos")
     public ResponseEntity<?> getMothYear(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "6") int size) {
         LocalDate dataAtual = LocalDate.now();
         Integer mes = dataAtual.getMonthValue();
         Integer ano = dataAtual.getYear();
@@ -80,7 +80,7 @@ public class GastosFixoController {
      * Listar gastos fixos por mês exato (com paginação)
      * @param mes - Mês a ser consultado
      * @param page - Número da página (padrão: 0)
-     * @param size - Tamanho da página (padrão: 10)
+     * @param size - Tamanho da página (padrão: 6)
      * @return ResponseEntity<?>
      * @throws Exception
      * author Adson Sá
