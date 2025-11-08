@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ads.gasto.dto.ProveedoresRequestDto;
@@ -123,6 +124,41 @@ public class ProveedoresController {
                     put("message", "Proveedor não encontrado");
                 }
             });
+        }
+    }
+    
+    /*
+     * Deletar proveedor
+     *
+     * @param id
+     * @return ResponseEntity
+     * author Adson Sá
+     */
+    @DeleteMapping("/proveedores/{id}")
+    public ResponseEntity<?> deleteProveedor(@PathVariable Long id) {
+        ProveedoreModel proveedor = this.proveedoreServiceImpl.buscarPorId(id);
+        if (proveedor != null) {
+            try {
+                this.proveedoreServiceImpl.eliminar(id);
+                return ResponseEntity.ok(new HashMap<String, String>() {{
+                    put("message", "Proveedor deletado com sucesso");
+                }});
+            } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+                // Constraint violation (provavelmente FK)
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(new HashMap<String, String>() {{
+                    put("message", "Não foi possível deletar o proveedor porque existem registros relacionados.");
+                }});
+            } catch (Exception e) {
+                // Outros erros genéricos
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new HashMap<String, String>() {{
+                    put("message", "Ocorreu um erro ao deletar o proveedor.");
+                }});
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new HashMap<String, String>() {{
+                    put("message", "Proveedor não encontrado");
+                }});
         }
     }
 }

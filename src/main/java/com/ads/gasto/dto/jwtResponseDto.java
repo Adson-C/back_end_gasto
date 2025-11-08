@@ -1,9 +1,5 @@
 package com.ads.gasto.dto;
 
-import java.util.Collection;
-
-import org.springframework.security.core.GrantedAuthority;
-
 import lombok.Data;
 
 @Data
